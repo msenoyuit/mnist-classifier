@@ -1,0 +1,8 @@
+#type number of input neurons # row
+s 4 4
+#type #row #id #in
+n      1    2   1   
+#type #id #weight
+c 1 .444
+#type number of output neurons # row
+e 5
