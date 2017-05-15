@@ -81,7 +81,7 @@ void nnet::removeNeuron(int id)
 		}
 	}
 
-	for (auto it = layout[doomedRow].begin(); it != layout[doomedRow].end(); ++it) {
+	for (auto it = layout[doomedRow].begin(); it != layout[doomedRow].end(); ++it) 
 	{
 		if ((*it)->getId() == id)
 		{
