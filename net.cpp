@@ -2,7 +2,29 @@
 
 nnet::nnet(int startNumber, int endNumber, int rows)
 {
+	std::map<int, neuron*> * net = new std::map<int, neuron*>();
 	rowCount = rows;
+	for (int j = 0; j < startNumber; j++)
+	{
+		//neuron(int idIn, neuronType typeIn, int rowIn, std::map<int, neuron*> * netIn);
+		neuron * newNer = new neuron(maxId++, START, 0, net);
+		(*net)[maxId] = newNer;
+	}
+	for (int i = 1; i < (rowCount-1); i++)
+	{
+		for (int j = 0; j < startNumber; j++)
+		{
+			neuron * newNer = new neuron(maxId++, HIDDEN, i, net);
+			(*net)[maxId] = newNer;
+		}
+	}
+
+	for (int j = 0; j < startNumber; j++)
+	{
+		//neuron(int idIn, neuronType typeIn, int rowIn, std::map<int, neuron*> * netIn);
+		neuron * newNer = new neuron(maxId++, END, rowCount-1, net);
+		(*net)[maxId] = newNer;
+	}
 
 }
 
@@ -65,7 +87,21 @@ void nnet::removeConnection(int idStart, int idEnd)
 
 std::vector<double> nnet::run()
 {
-	return std::vector<double>();
+	std::vector<double> results;
+	for (auto  layer : layout)
+	{
+		for (auto ner : layer)
+		{
+			ner->run();
+		}
+
+	}
+	for (auto last : layout[rowCount-1])
+	{
+		results.push_back(last->getAxon());
+	}
+
+	return results;
 }
 
 void nnet::removeNeuron(int id)

@@ -15,18 +15,18 @@ TEST_CASE( "Empty Test", "[empty]" )
 TEST_CASE("Test neuron class", "[neuron]")
 {
 	//neuron(int idIn, neuronType typeIn, int rowIn, )
-	std::map<int, neuron*> net;
-	neuron *n1 = new neuron(1, START, 1, &net);
-	neuron *n2 = new neuron(2, START, 1, &net);
-	neuron *n3 = new neuron(3, HIDDEN, 2, &net);
-	neuron *n4 = new neuron(4, END, 3, &net);
-	neuron *n5 = new neuron(5, END, 3, &net);
+	std::map<int, neuron*> * net = new std::map<int, neuron*>();
+	neuron *n1 = new neuron(1, START, 1, net);
+	neuron *n2 = new neuron(2, START, 1, net);
+	neuron *n3 = new neuron(3, HIDDEN, 2, net);
+	neuron *n4 = new neuron(4, END, 3, net);
+	neuron *n5 = new neuron(5, END, 3, net);
 	
-	net[1] = n1;
-	net[2] = n2;
-	net[3] = n3;
-	net[4] = n4;
-	net[5] = n5;
+	(*net)[1] = n1;
+	(*net)[2] = n2;
+	(*net)[3] = n3;
+	(*net)[4] = n4;
+	(*net)[5] = n5;
 
 	n1->run(1);
 	n2->run(2);
