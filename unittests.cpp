@@ -43,8 +43,8 @@ TEST_CASE("Test neuron class", "[neuron]")
 	n4->run();
 	n5->run();
 
-	REQUIRE(n3->getAxon() == .5);
-	REQUIRE(n4->getAxon() == 2);
+	REQUIRE(n3->getAxon() == .25);
+	REQUIRE(n4->getAxon() == 1);
 	REQUIRE(n5->getAxon() == 1);
 	REQUIRE(n1->toText().compare("s 1 1 0") == 0);
 	REQUIRE(n3->toText().compare("h 2 3 2\nc 1 0.250000\nc 2 0.125000") == 0);
@@ -58,7 +58,7 @@ TEST_CASE("Net Test", "[net]")
 {
 	std::vector<double> input = { 3,3,3 };
 	nnet net1 = nnet(3, 3, 4);// = nnet();
-	net1.toDoc("asdf");
+	//net1.toDoc("asdf");
 	std::vector<double> results = net1.run(input);
 	input.push_back(1);
 	REQUIRE_THROWS(net1.run(input));

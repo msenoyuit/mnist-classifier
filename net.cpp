@@ -119,12 +119,14 @@ std::vector<double> nnet::run(std::vector<double> input)
 	int inputCounter = 0;
 	for (auto ner : layout[0])
 	{
+		//std::cout << ner->getId() << " " << ner->getAxon() << " " << inputCounter <<'\n';
 		ner->run(input[inputCounter++]);
 	}
-	for (int i = 1; i < layout.size(); i++)
+	for (unsigned int i = 1; i < layout.size(); i++)
 	{
 		for (auto ner : layout[i])
 		{
+			//std::cout << ner->getId() << " " << ner->getAxon() << '\n';
 			ner->run();
 		}
 	}
@@ -138,6 +140,8 @@ std::vector<double> nnet::run(std::vector<double> input)
 
 	}
 	*/
+
+
 	for (auto last : layout[rowCount-1])
 	{
 		results.push_back(last->getAxon());

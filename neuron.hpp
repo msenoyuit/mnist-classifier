@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <iostream>
 
 
 enum neuronType {START, END, HIDDEN};
@@ -13,7 +14,7 @@ class neuron
 public:
 	neuron(int idIn, neuronType typeIn, int rowIn, std::map<int, neuron*> * netIn);
 	~neuron();
-	void run(int set = -1);
+	void run(double set = -1);
 	int getId() { return id; };
 	int getRow() { return row; };
 	neuronType getType() { return type; };

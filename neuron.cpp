@@ -13,9 +13,10 @@ neuron::~neuron()
 	dendrite.clear();
 }
 
-void neuron::run(int set)
+void neuron::run(double set)
 {
-	if (set != -1)
+	//std::cout << this->getId() << '\n';
+	if (set > 0)
 	{
 		axon = set;
 		return;
@@ -27,7 +28,10 @@ void neuron::run(int set)
 			fprintf(stderr, "bad net\n\n");
 			continue;
 		}
+		//std::cout << "axon begin " << axon << '\n';
+		//std::cout << axIn.second << " " << axIn.first << " " << (*net)[axIn.first]->getAxon() << '\n';
 		axon = axon + axIn.second * (*net)[axIn.first]->getAxon();
+		//std::cout << "axon end " << axon << '\n';
 	}
 
 	axon = axon / dendrite.size();

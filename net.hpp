@@ -9,6 +9,7 @@ public:
 	nnet(int startNumber = 5, int endNumber = 5, int rows = 3);
 	nnet(std::string fileName);
 	~nnet();
+	nnet* child();
 	bool toDoc(std::string fileName);
 	bool loadDoc(std::string fileName);
 
