@@ -23,6 +23,7 @@ public:
 	void changeDendrite(int id, double weight);
 	void removeDendrite(int id);
 	void addDendrite(int id, double weight = .5);
+	std::vector<std::pair<int, double>> getDendrite() { return dendrite; };
 
 private:
 	int id;

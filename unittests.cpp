@@ -57,8 +57,10 @@ TEST_CASE("Test neuron class", "[neuron]")
 TEST_CASE("Net Test", "[net]")
 {
 	std::vector<double> input = { 3,3,3 };
-	nnet net1 = nnet(3, 3, 4);// = nnet();
-	//net1.toDoc("asdf");
+	Nnet net1 = Nnet(3, 3, 4);// = Nnet();
+	Nnet net1Copy = net1;
+	net1.toDoc("asdf");
+	net1Copy.toDoc("asdf");
 	std::vector<double> results = net1.run(input);
 	input.push_back(1);
 	REQUIRE_THROWS(net1.run(input));
@@ -66,4 +68,4 @@ TEST_CASE("Net Test", "[net]")
 	{
 		std::cout << num << '\n';
 	}
-}
+} 

@@ -1,6 +1,6 @@
 #include "net.hpp"
 
-nnet::nnet(int startNumber, int endNumber, int rows)
+Nnet::Nnet(int startNumber, int endNumber, int rows)
 {
 	std::vector<neuron*> row;
 	std::map<int, neuron*> * net = new std::map<int, neuron*>();
@@ -47,16 +47,40 @@ nnet::nnet(int startNumber, int endNumber, int rows)
 
 }
 
-nnet::nnet(std::string fileName)
+Nnet::Nnet(std::string fileName)
 {
 	loadDoc(fileName);
 }
 
-nnet::~nnet()
+Nnet::~Nnet()
 {
 }
 
-bool nnet::toDoc(std::string fileName)
+Nnet::Nnet(Nnet & oldNet)
+{
+	std::vector<neuron*> rowNew;
+	std::map<int, neuron*> * net = new std::map<int, neuron*>();
+
+	for (std::vector<neuron*> rowOld : oldNet.layout)
+	{
+		rowNew.clear();
+		for (neuron* nerOld : rowOld)
+		{
+			neuron * newNer = new neuron(nerOld->getId(), nerOld->getType(), nerOld->getRow(), net);
+			for (auto dendrite : nerOld->getDendrite())
+			{
+				newNer->addDendrite(dendrite.first, dendrite.second);
+			}
+			(*net)[nerOld->getId()] = newNer;
+			rowNew.push_back(newNer);
+		}
+		layout.push_back(rowNew);
+	}
+	rowCount = oldNet.layout.size();
+	maxId = oldNet.maxId;
+}
+
+bool Nnet::toDoc(std::string fileName)
 {
 	for (auto layer : layout)
 	{
@@ -69,12 +93,12 @@ bool nnet::toDoc(std::string fileName)
 	return false;
 }
 
-bool nnet::loadDoc(std::string fileName)
+bool Nnet::loadDoc(std::string fileName)
 {
 	return false;
 }
 
-int nnet::addNeuron(int row, neuronType typeIn, double weight)
+int Nnet::addNeuron(int row, neuronType typeIn, double weight)
 {
 	//neuron::neuron(int idIn, neuronType typeIn, int rowIn, std::map<int, neuron*> * netIn)
 	++maxId;
@@ -92,7 +116,7 @@ int nnet::addNeuron(int row, neuronType typeIn, double weight)
 	return maxId;
 }
 
-void nnet::addConnection(int idStart, int idEnd, double weight)
+void Nnet::addConnection(int idStart, int idEnd, double weight)
 {
 	neuron * start = (*net)[idStart];
 	neuron * end = (*net)[idEnd];
@@ -100,19 +124,25 @@ void nnet::addConnection(int idStart, int idEnd, double weight)
 	end->addDendrite(idStart, weight);
 }
 
-void nnet::changeConnection(int idStart, int idEnd, double weight)
+void Nnet::changeConnection(int idStart, int idEnd, double weight)
 {
 	neuron * end = (*net)[idEnd];
 	end->changeDendrite(idStart, weight);
 }
 
-void nnet::removeConnection(int idStart, int idEnd) 
+void Nnet::removeConnection(int idStart, int idEnd) 
 {
 	neuron * end = (*net)[idEnd];
 	end->removeDendrite(idStart);
 }
 
-std::vector<double> nnet::run(std::vector<double> input)
+int Nnet::getColCount(int col)
+{
+	if (col >= rowCount) { throw std::invalid_argument("Error: Col not in Layout"); }
+	return layout[col].size();
+}
+
+std::vector<double> Nnet::run(std::vector<double> input)
 {
 	std::vector<double> results;
 	if (input.size() != layout[0].size()) { throw std::invalid_argument("Error: wrong number of inputs"); }
@@ -150,7 +180,7 @@ std::vector<double> nnet::run(std::vector<double> input)
 	return results;
 }
 
-void nnet::removeNeuron(int id)
+void Nnet::removeNeuron(int id)
 {
 	neuron * doomed = (*net)[id];
 	int doomedRow = doomed->getRow();
