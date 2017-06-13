@@ -2,7 +2,7 @@
 #define CATCH_CONFIG_COLOUR_NONE
 #include "catch.hpp"
 #include <cstdio>
-#include "neuron.hpp"
+#include "net.hpp"
 
 
 
@@ -49,5 +49,21 @@ TEST_CASE("Test neuron class", "[neuron]")
 	REQUIRE(n1->toText().compare("s 1 1 0") == 0);
 	REQUIRE(n3->toText().compare("h 2 3 2\nc 1 0.250000\nc 2 0.125000") == 0);
 	REQUIRE(n5->toText().compare("e 3 5 1\nc 2 0.500000") == 0);
+	n3->removeDendrite(1); 
+	REQUIRE(n3->toText().compare("h 2 3 1\nc 2 0.125000") == 0);
 	delete n1, n2, n3, n4, n5;
+}
+
+TEST_CASE("Net Test", "[net]")
+{
+	std::vector<double> input = { 3,3,3 };
+	nnet net1 = nnet(3, 3, 4);// = nnet();
+	net1.toDoc("asdf");
+	std::vector<double> results = net1.run(input);
+	input.push_back(1);
+	REQUIRE_THROWS(net1.run(input));
+	for (auto num : results)
+	{
+		std::cout << num << '\n';
+	}
 }

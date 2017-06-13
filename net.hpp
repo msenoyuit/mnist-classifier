@@ -1,6 +1,7 @@
 #ifndef NET_HEADER
 #define NET_HEADER
 #include "neuron.hpp"
+#include <iostream>
 
 class nnet
 {
@@ -18,7 +19,7 @@ public:
 	void changeConnection(int idStart, int idEnd, double weight);
 	void removeConnection(int idStart, int idEnd);
 
-	std::vector<double> run();
+	std::vector<double> nnet::run(std::vector<double> input);
 
 private:
 	std::map<int, neuron*> * net;

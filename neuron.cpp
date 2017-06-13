@@ -29,6 +29,8 @@ void neuron::run(int set)
 		}
 		axon = axon + axIn.second * (*net)[axIn.first]->getAxon();
 	}
+
+	axon = axon / dendrite.size();
 }
 
 std::string neuron::toText()
