@@ -1,11 +1,12 @@
 #include "neuron.hpp"
 
-neuron::neuron(int idIn, neuronType typeIn, int rowIn, std::map<int, neuron*> * netIn)
+neuron::neuron(int idIn, neuronType typeIn, int rowIn, std::map<int, neuron*> * netIn, double weightIn)
 {
 	id = idIn;
 	type = typeIn;
 	row = rowIn;
 	net = netIn;
+	weight = weightIn;
 }
 
 neuron::~neuron()
@@ -34,7 +35,8 @@ void neuron::run(double set)
 		//std::cout << "axon end " << axon << '\n';
 	}
 
-	axon = axon / dendrite.size();
+	axon = axon * weight / dendrite.size();
+	//std::cout << "axon " << axon << '\n';
 }
 
 std::string neuron::toText()
@@ -59,6 +61,8 @@ std::string neuron::toText()
 	line.append(std::to_string(id));
 	line.append(" ");
 	line.append(std::to_string(dendrite.size()));
+	line.append(" ");
+	line.append(std::to_string(weight));
 
 	//#type #id #weight
 	//c 1 .444
@@ -88,6 +92,18 @@ void neuron::changeDendrite(int id, double weight)
 	}
 }
 
+void neuron::mutateDendrite(double amount)
+{
+	std::random_device rd;  //Will be used to obtain a seed for the random number engine
+	std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+	std::uniform_int_distribution<> dis(0, dendrite.size()-1);
+	int dendNumb = dis(gen);
+//	std::cout << "dend numb " <<  dendNumb << '\n';
+	std::normal_distribution<double> nDis(0, amount);
+	auto random_it = std::next(std::begin(dendrite), dendNumb);
+	random_it->second = random_it->second * (1 + nDis(gen));
+}
+
 void neuron::removeDendrite(int id)
 {
 	for (auto it = dendrite.begin(); it != dendrite.end(); ++it) {
@@ -97,4 +113,10 @@ void neuron::removeDendrite(int id)
 			dendrite.pop_back();
 		}
 	}
+}
+
+
+void neuron::setWeight(double weightIn)
+{
+	weight = weightIn;
 }

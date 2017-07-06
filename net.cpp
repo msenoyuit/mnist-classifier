@@ -13,7 +13,7 @@ Nnet::Nnet(int startNumber, int endNumber, int rows)
 	}
 	layout.push_back(row);
 	row.clear();
-
+	std::cout << "1 - net" << '\n';
 	for (int i = 1; i < (rowCount-1); i++)
 	{
 		for (int j = 0; j < startNumber; j++)
@@ -66,7 +66,7 @@ Nnet::Nnet(Nnet & oldNet)
 		rowNew.clear();
 		for (neuron* nerOld : rowOld)
 		{
-			neuron * newNer = new neuron(nerOld->getId(), nerOld->getType(), nerOld->getRow(), net);
+			neuron * newNer = new neuron(nerOld->getId(), nerOld->getType(), nerOld->getRow(), net, nerOld->getWeight());
 			for (auto dendrite : nerOld->getDendrite())
 			{
 				newNer->addDendrite(dendrite.first, dendrite.second);
@@ -134,6 +134,46 @@ void Nnet::removeConnection(int idStart, int idEnd)
 {
 	neuron * end = (*net)[idEnd];
 	end->removeDendrite(idStart);
+}
+
+int Nnet::mutate(double chance)
+{
+	std::random_device rd;  //Will be used to obtain a seed for the random number engine
+	std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+	std::uniform_int_distribution<> dis(0, 100000);
+	std::normal_distribution<double> nDis(0, .1);
+	int numb = 0;
+	int count = 0;
+
+	double random;
+	for (std::vector<neuron*> row : layout)
+	{
+		for (neuron* ner: row)
+		{
+			numb = dis(gen);
+			random = (double)numb / 100000;
+			//std::cout << random << '\n';
+
+			if (random < chance)
+			{
+				//std::cout << "mutate " << ner->getId() << '\n';
+				count++;
+				if ((random / chance) > .75 || ner->getRow() == 0)
+				{
+					//std::cout << "weight " << ner->getId() << '\n';
+					ner->setWeight(ner->getWeight() * (1 + nDis(gen)));
+				}
+				else
+				{
+					//std::cout << "dend " << ner->getId() << '\n';
+					ner->setWeight(ner->getWeight() * (1 + nDis(gen)));
+					ner->mutateDendrite(chance);
+				}
+			}
+		}
+	}
+	
+	return count;
 }
 
 int Nnet::getColCount(int col)

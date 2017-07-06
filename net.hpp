@@ -2,6 +2,8 @@
 #define NET_HEADER
 #include "neuron.hpp"
 #include <iostream>
+#include <ctime>
+#include <random>
 
 class Nnet
 {
@@ -19,6 +21,8 @@ public:
 	void addConnection(int idStart, int idEnd, double weight = .5);
 	void changeConnection(int idStart, int idEnd, double weight);
 	void removeConnection(int idStart, int idEnd);
+
+	int mutate(double chance);
 
 	int getRowCount() { return rowCount; };
 	int getColCount(int col = 0);

@@ -3,7 +3,7 @@
 #include "catch.hpp"
 #include <cstdio>
 #include "net.hpp"
-
+#include "mnistNet.cpp"
 
 
 TEST_CASE( "Empty Test", "[empty]" )
@@ -46,26 +46,34 @@ TEST_CASE("Test neuron class", "[neuron]")
 	REQUIRE(n3->getAxon() == .25);
 	REQUIRE(n4->getAxon() == 1);
 	REQUIRE(n5->getAxon() == 1);
-	REQUIRE(n1->toText().compare("s 1 1 0") == 0);
-	REQUIRE(n3->toText().compare("h 2 3 2\nc 1 0.250000\nc 2 0.125000") == 0);
-	REQUIRE(n5->toText().compare("e 3 5 1\nc 2 0.500000") == 0);
+	REQUIRE(n1->toText().compare("s 1 1 0 1.000000") == 0);
+	REQUIRE(n3->toText().compare("h 2 3 2 1.000000\nc 1 0.250000\nc 2 0.125000") == 0);
+	REQUIRE(n5->toText().compare("e 3 5 1 1.000000\nc 2 0.500000") == 0);
 	n3->removeDendrite(1); 
-	REQUIRE(n3->toText().compare("h 2 3 1\nc 2 0.125000") == 0);
+	REQUIRE(n3->toText().compare("h 2 3 1 1.000000\nc 2 0.125000") == 0);
 	delete n1, n2, n3, n4, n5;
+	std::cout << "end neuron test" << '\n';
 }
 
 TEST_CASE("Net Test", "[net]")
 {
-	std::vector<double> input = { 3,3,3 };
-	Nnet net1 = Nnet(3, 3, 4);// = Nnet();
+	std::vector<double> input = {3,3};
+	Nnet net1 = Nnet(2, 2, 3);// = Nnet();
 	Nnet net1Copy = net1;
-	net1.toDoc("asdf");
-	net1Copy.toDoc("asdf");
+	//net1.toDoc("asdf");
+	//net1Copy.toDoc("asdf");
 	std::vector<double> results = net1.run(input);
 	input.push_back(1);
 	REQUIRE_THROWS(net1.run(input));
 	for (auto num : results)
 	{
-		std::cout << num << '\n';
+		//std::cout << num << '\n';
 	}
+	net1.toDoc("asdf");
+	for (int i = 0; i < 1000; i++)
+	{
+		net1.mutate(.1);
+	}
+
+	net1.toDoc(" ");
 } 

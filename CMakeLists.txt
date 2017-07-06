@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(src
 	neuron.hpp neuron.cpp
 	net.hpp net.cpp
+	mnistNet.cpp
   )
 
 set(test_src unittests.cpp)
